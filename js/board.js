@@ -15,6 +15,7 @@ class Board {
    }
   
    play(){
+       this.checkBoardState();
        let currentFig = this.addFigure();
        let figStatus = this.checkState(currentFig);
        window.addEventListener('keydown', (event) => {
@@ -35,11 +36,11 @@ class Board {
                 this.play();//рекурсия
             }
             this.drawBlocks(this.boardMatrix);
-        }, 500);
+        }, 300);
    }
 
    controls(event, currentFig) {
-        switch(event.code) {
+        switch(event.code) {//надо добавить еще ускорение вниз
             case 'ArrowRight': 
                 this.clearFigure(currentFig);
                 currentFig.currentX++;
@@ -57,17 +58,25 @@ class Board {
             break;
         };
     }
-
-
-
-
+    checkBoardState(){
+        this.boardMatrix.forEach((row, index) => {
+            if(!row.includes(0)) {
+                this.boardMatrix.splice(index, 1);
+                let newRow = [];
+                for(let i = 0; i < COLS; i++){
+                    newRow.push(0);
+                }
+                this.boardMatrix.unshift(newRow);
+            }
+        })
+    }
     addFigure() {
         let figType = Math.floor(Math.random() * 6);
         let figure = new Figure(Figures[figType]);
         this.addMatrix(figure);
         return figure;
     }
-    checkState(figure) {
+    checkState(figure) {//надо исправить, перезаписывает углы там где у фигуры есть нули в матрице
         let checkFig = figure.matrix[figure.matrix.length-1];// нижние клетки матрицы фигуры
         let checkBoard = [];// клетки доски следующего ряда под матрицой фигуры
         for(let i = 0; i < checkFig.length; i++) {
@@ -82,7 +91,7 @@ class Board {
         }
         return true;
     }
-    moveFigure(figure, x, y) {
+    moveFigure(figure, x, y) {//надо добавить проверку на возможность перемещения за края
        this.clearFigure(figure);
        figure.currentX = x;
        figure.currentY = y;
