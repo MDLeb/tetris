@@ -50,17 +50,26 @@ class Board {
         switch(event.code) {//надо добавить еще ускорение вниз
             case 'ArrowRight': 
                 this.clearFigure(currentFig);
-                currentFig.currentX++;
+                if(currentFig.currentX+currentFig.matrix[0].length < COLS) {
+                    currentFig.currentX++;
+                };
                 this.moveFigure(currentFig, currentFig.currentX, currentFig.currentY);
                 break;
             case 'ArrowLeft': 
                 this.clearFigure(currentFig);
-                currentFig.currentX--;
+                if((currentFig.currentX-1) >= 0) {
+                    currentFig.currentX--;
+                };
                 this.moveFigure(currentFig, currentFig.currentX, currentFig.currentY);
                 break;
             case 'ArrowUp': 
                 this.clearFigure(currentFig);
-                currentFig.matrix = currentFig.rotate(currentFig.matrix);
+                    let bufFig = new Figure(currentFig.figureType);//посмотреть нормальную проверку...
+                    bufFig.matrix = currentFig.matrix;
+                    bufFig.currentX = currentFig.currentX;
+                    bufFig.currentY = currentFig.currentY;
+                    bufFig.matrix = bufFig.rotate(bufFig.matrix);
+                    if(bufFig.currentX >= 0 && bufFig.currentX+bufFig.matrix[0].length+1 < COLS) currentFig.matrix = bufFig.matrix;
                 this.moveFigure(currentFig, currentFig.currentX, currentFig.currentY);
                 break;
             case 'ArrowDown': 
@@ -91,7 +100,7 @@ class Board {
         this.addMatrix(figure);
         return figure;
     }
-    checkState(figure) {//надо исправить, перезаписывает углы там где у фигуры есть нули в матрице
+    checkState(figure) {//надо исправить, перезаписывает углы там где у фигуры есть нули в матрице//частично исправила
         let checkFig = figure.matrix[figure.matrix.length-1];// нижние клетки матрицы фигуры
         let checkBoard = [];// клетки доски следующего ряда под матрицой фигуры
         for(let i = 0; i < checkFig.length; i++) {
@@ -106,7 +115,7 @@ class Board {
         }
         return true;
     }
-    moveFigure(figure, x, y) {//надо добавить проверку на возможность перемещения за края
+    moveFigure(figure, x, y) {
        this.clearFigure(figure);
        figure.currentX = x;
        figure.currentY = y;
@@ -115,7 +124,7 @@ class Board {
     addMatrix(figure){
         for(let i = figure.matrix.length-1; i >= 0; i--) {
             for (let j = 0; j < figure.matrix[0].length; j++) {
-                if(this.boardMatrix[figure.currentY+i][figure.currentX+j]) continue;
+                if(this.boardMatrix[figure.currentY+i][figure.currentX+j]) continue; //не перезаписывать ячейки в которых уже не ноль(при движении вправо/влево не работает) 
                 this.boardMatrix[figure.currentY+i][figure.currentX+j] = figure.matrix[i][j];
             }
         }    

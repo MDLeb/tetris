@@ -60,7 +60,6 @@ class Figure {
     figureType;
     constructor(figureType){
         this.figureType = figureType;
-        this.color = figureType.color;
         this.matrix = figureType.matrix;  
         this.emptyMatrix = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
         this.currentX = 3;
