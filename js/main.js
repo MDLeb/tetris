@@ -16,7 +16,7 @@ class Game {
        this.board.play();
     }
 }
-
-let game = new Game;
-game.start();
-
+let play = () => {
+    let game = new Game;
+    game.start();
+}

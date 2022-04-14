@@ -10,6 +10,8 @@ class Board {
            }
            arr.push(row);
        }
+    document.getElementsByClassName('game-over')[0].classList.remove('active');
+    document.getElementsByClassName('play-button')[0].setAttribute('disabled', true);
     this.boardMatrix = arr;
     this.ctx = ctx;
     this.flag = true;
@@ -42,6 +44,7 @@ class Board {
    }
    writeOnBoard(){
         document.getElementsByClassName('game-over')[0].classList.toggle('active');
+        document.getElementsByClassName('play-button')[0].removeAttribute('disabled');
    }
    controls(event, currentFig) {
         switch(event.code) {//надо добавить еще ускорение вниз

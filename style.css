@@ -14,6 +14,9 @@
   padding: 15px 30px;
   cursor: pointer;
 }
+.play-button:disabled {
+  opacity: 0.2;
+}
 canvas {
   border: 1px solid red;
 }
