@@ -40,7 +40,7 @@ class Board {
                 this.play();//рекурсия
             }
             this.drawBlocks(this.boardMatrix);
-        }, 100);
+        }, 500);
    }
    writeOnBoard(){
         document.getElementsByClassName('game-over')[0].classList.toggle('active');
@@ -62,7 +62,12 @@ class Board {
                 this.clearFigure(currentFig);
                 currentFig.matrix = currentFig.rotate(currentFig.matrix);
                 this.moveFigure(currentFig, currentFig.currentX, currentFig.currentY);
-            break;
+                break;
+            case 'ArrowDown': 
+                this.clearFigure(currentFig);
+                currentFig.currentY++;
+                this.moveFigure(currentFig, currentFig.currentX, currentFig.currentY);
+                break;
         };
     }
     checkBoardState(){
@@ -110,6 +115,7 @@ class Board {
     addMatrix(figure){
         for(let i = figure.matrix.length-1; i >= 0; i--) {
             for (let j = 0; j < figure.matrix[0].length; j++) {
+                if(this.boardMatrix[figure.currentY+i][figure.currentX+j]) continue;
                 this.boardMatrix[figure.currentY+i][figure.currentX+j] = figure.matrix[i][j];
             }
         }    
