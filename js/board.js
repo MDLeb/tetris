@@ -18,35 +18,48 @@ class Board {
        let currentFig = this.addFigure();
        let figStatus = this.checkState(currentFig);
        window.addEventListener('keydown', (event) => {
-        switch(event.code) {
-            case 'ArrowRight': 
-                currentFig.currentX++;
-                this.moveFigure(currentFig, currentFig.currentX, currentFig.currentY);
-                break;
-            case 'ArrowLeft': 
-                currentFig.currentX--;
-                this.moveFigure(currentFig, currentFig.currentX, currentFig.currentY);
-                break;
-            case 'ArrowUp': 
-                currentFig.matrix = currentFig.rotate(currentFig.matrix);
-                this.moveFigure(currentFig, currentFig.currentX, currentFig.currentY);
-            break;
-       };
-    });
+           this.controls(event, currentFig);
+        }, true);
        let interval = setInterval(()=>{//интервал автоматического движения фигуры
             if(figStatus){
                 this.moveFigure(currentFig, currentFig.currentX, currentFig.currentY+1);
                 //console.table(this.boardMatrix);
-                figStatus = this.checkState(currentFig);
+                figStatus = this.checkState(currentFig); 
 
             }else{
                 clearInterval(interval);
                 currentFig = null;
-                this.play();
+                window.removeEventListener('keydown', (event) => {
+                    this.controls(event, currentFig); 
+                }, true);
+                this.play();//рекурсия
             }
             this.drawBlocks(this.boardMatrix);
         }, 500);
    }
+
+   controls(event, currentFig) {
+        switch(event.code) {
+            case 'ArrowRight': 
+                this.clearFigure(currentFig);
+                currentFig.currentX++;
+                this.moveFigure(currentFig, currentFig.currentX, currentFig.currentY);
+                break;
+            case 'ArrowLeft': 
+                this.clearFigure(currentFig);
+                currentFig.currentX--;
+                this.moveFigure(currentFig, currentFig.currentX, currentFig.currentY);
+                break;
+            case 'ArrowUp': 
+                this.clearFigure(currentFig);
+                currentFig.matrix = currentFig.rotate(currentFig.matrix);
+                this.moveFigure(currentFig, currentFig.currentX, currentFig.currentY);
+            break;
+        };
+    }
+
+
+
 
     addFigure() {
         let figType = Math.floor(Math.random() * 6);
@@ -61,7 +74,7 @@ class Board {
             checkBoard.push(this.boardMatrix[figure.currentY+figure.matrix.length][figure.currentX+i]);
         }
         for(let k = 0; k < checkBoard.length; k++) {
-            if (checkBoard[k] >= 1) {
+            if (checkBoard[k] >= 1 && checkFig[k] >=1) {
                 return false;
             }else if((figure.currentY+figure.matrix.length+2) > ROWS) {
                 return false
@@ -95,7 +108,7 @@ class Board {
                 if(board[j][i]) {
                    ctx.fillStyle = colors[board[j][i]-1];
                    ctx.strokeStyle = 'red';
-                   ctx.fillRect(i, j, 1-0.03, 1-0.03);
+                   ctx.fillRect(i, j, 1, 1);
                 }else if(board[j][i] == 0) {
                     ctx.clearRect(i, j, 1, 1);
                 }
