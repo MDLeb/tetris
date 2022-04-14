@@ -1,3 +1,5 @@
+const colors = ['red', 'grey', 'blue', 'orange', 'yellowgreen', 'magenta', ]
+
 class Board { 
    constructor(ctx) {
        let arr = [];
@@ -46,7 +48,8 @@ class Board {
    }
 
     addFigure() {
-        let figure = new Figure(Figures[6]);
+        let figType = Math.floor(Math.random() * 6);
+        let figure = new Figure(Figures[figType]);
         this.addMatrix(figure);
         return figure;
     }
@@ -57,7 +60,7 @@ class Board {
             checkBoard.push(this.boardMatrix[figure.currentY+figure.matrix.length][figure.currentX+i]);
         }
         for(let k = 0; k < checkBoard.length; k++) {
-            if (checkBoard[k] === 1) {
+            if (checkBoard[k] >= 1) {
                 return false;
             }else if((figure.currentY+figure.matrix.length+2) > ROWS) {
                 return false
@@ -88,8 +91,8 @@ class Board {
     drawBlocks(board) {
         for(let i = 0; i < COLS; i++) {
             for (let j = 0; j < ROWS; j++) {
-                if(board[j][i] == 1) {
-                    ctx.fillStyle = 'green';
+                if(board[j][i]) {
+                    ctx.fillStyle = colors[board[j][i]-1];
                     ctx.fillRect(i, j, 1, 1);
                 }else if(board[j][i] == 0) {
                     ctx.clearRect(i, j, 1, 1);
