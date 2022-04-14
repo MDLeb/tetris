@@ -1,5 +1,6 @@
 .grid {
   display: grid;
+  position: relative;
   grid-template-columns: 320px 200px;
 }
 .right-column {
@@ -14,5 +15,18 @@
   cursor: pointer;
 }
 canvas {
-  border: 1px solid red;;
+  border: 1px solid red;
+}
+.text {
+  display: none;
+}
+.text.active{
+  position: absolute;
+  width: 300px;
+  display: block;
+  top: 250px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 1000;
+  color: black;
 }

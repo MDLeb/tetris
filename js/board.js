@@ -12,10 +12,12 @@ class Board {
        }
     this.boardMatrix = arr;
     this.ctx = ctx;
+    this.flag = true;
    }
   
    play(){
        this.checkBoardState();
+       if(!this.flag) return this.writeOnBoard();
        let currentFig = this.addFigure();
        let figStatus = this.checkState(currentFig);
        window.addEventListener('keydown', (event) => {
@@ -36,9 +38,11 @@ class Board {
                 this.play();//рекурсия
             }
             this.drawBlocks(this.boardMatrix);
-        }, 300);
+        }, 100);
    }
-
+   writeOnBoard(){
+        document.getElementsByClassName('game-over')[0].classList.toggle('active');
+   }
    controls(event, currentFig) {
         switch(event.code) {//надо добавить еще ускорение вниз
             case 'ArrowRight': 
@@ -59,6 +63,9 @@ class Board {
         };
     }
     checkBoardState(){
+        this.boardMatrix[0].forEach((val) => {
+            if(val) this.flag = false;
+        });
         this.boardMatrix.forEach((row, index) => {
             if(!row.includes(0)) {
                 this.boardMatrix.splice(index, 1);
