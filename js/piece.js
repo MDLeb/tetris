@@ -70,10 +70,19 @@ class Figure {
     }
     
     rotate(matrix) {
-        const N = matrix.length - 1;
-        const result = matrix.map((row, i) =>
-          row.map((val, j) => matrix[N - j][i])
-        );
-        return result;
+        let resArr = [];
+        matrix.forEach(element => {
+            element.reverse();
+        });
+       for(let i = 0; i < matrix[0].length; i++){//длина первой строки
+           let row = [];//создали три пустых строки
+          
+
+           for(let j = 0; j < matrix.length; j++) {//по 2 элемента в каждую строку нового массива = длина исходного массива
+                row.push(matrix[j][i]);
+           }
+           resArr.push(row);//пушим три строки в конечный массив
+       }
+       return resArr;
       }
 }

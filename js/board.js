@@ -28,14 +28,15 @@ class Board {
                 this.moveFigure(currentFig, currentFig.currentX, currentFig.currentY);
                 break;
             case 'ArrowUp': 
-                //this.rotate(figureType.matrix)
+                currentFig.matrix = currentFig.rotate(currentFig.matrix);
+                this.moveFigure(currentFig, currentFig.currentX, currentFig.currentY);
             break;
        };
     });
        let interval = setInterval(()=>{//интервал автоматического движения фигуры
             if(figStatus){
                 this.moveFigure(currentFig, currentFig.currentX, currentFig.currentY+1);
-                console.table(this.boardMatrix);
+                //console.table(this.boardMatrix);
                 figStatus = this.checkState(currentFig);
 
             }else{
@@ -92,11 +93,13 @@ class Board {
         for(let i = 0; i < COLS; i++) {
             for (let j = 0; j < ROWS; j++) {
                 if(board[j][i]) {
-                    ctx.fillStyle = colors[board[j][i]-1];
-                    ctx.fillRect(i, j, 1, 1);
+                   ctx.fillStyle = colors[board[j][i]-1];
+                   ctx.strokeStyle = 'red';
+                   ctx.fillRect(i, j, 1-0.03, 1-0.03);
                 }else if(board[j][i] == 0) {
                     ctx.clearRect(i, j, 1, 1);
                 }
+                //requestAnimationFrame??????
             }
         }   
     }
