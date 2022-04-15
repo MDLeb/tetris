@@ -47,7 +47,7 @@ class Board {
         document.getElementsByClassName('play-button')[0].removeAttribute('disabled');
    }
    controls(event, currentFig) {
-        switch(event.code) {//надо добавить еще ускорение вниз
+        switch(event.code) {
             case 'ArrowRight': 
                 this.clearFigure(currentFig);
                 if(currentFig.currentX+currentFig.matrix[0].length < COLS) {
@@ -74,6 +74,7 @@ class Board {
                 break;
             case 'ArrowDown': 
                 this.clearFigure(currentFig);
+                if(currentFig.currentY+currentFig.matrix.length >= ROWS) break;///ошибки 
                 currentFig.currentY++;
                 this.moveFigure(currentFig, currentFig.currentX, currentFig.currentY);
                 break;
@@ -116,15 +117,28 @@ class Board {
         return true;
     }
     moveFigure(figure, x, y) {
-       this.clearFigure(figure);
-       figure.currentX = x;
-       figure.currentY = y;
-       this.addMatrix(figure);
+        /*if(x < figure.currentX){
+            for(let i = 0; i < figure.matrix.length; i++) {
+                if(figure.matrix[i][0] != 0 && this.boardMatrix[currentY+i][x] != 0)
+                return;
+            }
+        }
+        if(x > figure.currentX){
+            for(let i = 0; i < figure.matrix.length; i++) {
+                if(figure.matrix[i][figure.matrix[0].length-1] != 0 && this.boardMatrix[currentY+i][x+figure.matrix[0].length] != 0)
+                return;
+            }
+        }else{*/
+            this.clearFigure(figure);
+            figure.currentX = x;
+            figure.currentY = y;
+            this.addMatrix(figure);
+        //}
     }
     addMatrix(figure){
         for(let i = figure.matrix.length-1; i >= 0; i--) {
             for (let j = 0; j < figure.matrix[0].length; j++) {
-                if(this.boardMatrix[figure.currentY+i][figure.currentX+j]) continue; //не перезаписывать ячейки в которых уже не ноль(при движении вправо/влево не работает) 
+                if(this.boardMatrix[figure.currentY+i][figure.currentX+j] && figure.matrix[i][j] == 0) continue; //не перезаписывать ячейки в которых уже не ноль(при движении вправо/влево/вниз не работает) 
                 this.boardMatrix[figure.currentY+i][figure.currentX+j] = figure.matrix[i][j];
             }
         }    
@@ -142,9 +156,9 @@ class Board {
                 if(board[j][i]) {
                    ctx.fillStyle = colors[board[j][i]-1];
                    ctx.strokeStyle = 'red';
-                   ctx.fillRect(i, j, 1, 1);
+                   ctx.fillRect(i, j+1, 1, 1);
                 }else if(board[j][i] == 0) {
-                    ctx.clearRect(i, j, 1, 1);
+                    ctx.clearRect(i, j+1, 1, 1);
                 }
                 //requestAnimationFrame??????
             }
